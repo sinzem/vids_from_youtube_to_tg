@@ -4,7 +4,7 @@ const downloader = require("../downloader/downloader");
 
 const interval = process.env.PARSING_INTERVAL_MINUTES * 60 * 1000 || 86400000;
 
-const parsingInterval = (url, channelId, save, sendFunction, timeout, offset, selector) =>setTimeout(() => {
+const parsingInterval = (url, channelId, save, sendFunction, timeout, offset, selector) => setTimeout(() => {
     setInterval(() => {
         console.log(`${url}: start of processing`);
         parser(url, offset, selector)
