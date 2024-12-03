@@ -1,16 +1,12 @@
 require('dotenv').config();
 
-const urlYudaev = process.env.URL_YUDAEVSCHOOL;
-const channelYudaev = process.env.CHANNEL_ID_YUDAEVSCHOOL;
-const startWordYudaev = process.env.START_WORD_YUDAEVSCHOOL;
-const timeoutYudaev = 1 * 60 * 1000;
-const saveVideoYudaev = false;
-
-
-module.exports = {
-    urlYudaev,
-    channelYudaev,
-    startWordYudaev,
-    timeoutYudaev,
-    saveVideoYudaev
+const channelYudaev = {
+    url: process.env.URL_YUDAEVSCHOOL,
+    channelId: process.env.CHANNEL_ID_YUDAEVSCHOOL,
+    startWord: process.env.START_WORD_YUDAEVSCHOOL,
+    timeout: 1 * 60 * 1000,
+    saveVideo: false
 }
+
+
+module.exports = channelYudaev;

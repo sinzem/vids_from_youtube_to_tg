@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const puppeteer = require('puppeteer');
 
-async function parser(url) {
+async function parser(url, offset) {
 
     const channelName = url.split("/").at(-2);
     const linksDb = path.resolve(__dirname, "..", "db", `${channelName}.json`)
@@ -18,15 +18,23 @@ async function parser(url) {
         height: 800
     });
 
-    if (!fs.existsSync(linksDb)) {
-      await page.evaluate(async () => {
+    if (!fs.existsSync(linksDb) || offset > 42) {
+      let links = await page.evaluate(async () => {
         const distance = 80;
         const delay = 400;
         while (document.scrollingElement.scrollTop + window.innerHeight < document.scrollingElement.scrollHeight) {
             document.scrollingElement.scrollBy(0, distance);
             await new Promise(resolve => { setTimeout(resolve, delay); });
         }
+        const array = document.querySelectorAll(".ShortsLockupViewModelHostEndpoint.reel-item-endpoint");
+        const links = [];
+        array.forEach(e => links.push(e.href));
+        return links;
       });
+      if(!fs.existsSync(path.resolve(__dirname, "..", "db"))) {
+        fs.mkdirSync(path.resolve(__dirname, "..", "db"));
+      }
+      fs.writeFileSync(linksDb, JSON.stringify(links));
     }
   
 
@@ -38,8 +46,11 @@ async function parser(url) {
     })
 
     await browser.close();
-
+    
     return arr;
 };
 
 module.exports = parser;
+
+
+

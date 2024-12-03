@@ -2,10 +2,8 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require("path");
 const TGBot = require("node-telegram-bot-api");
-const downloader = require("./downloader/downloader");
-const parser = require("./parser/parser");
-const parsingInterval = require("./parsingInterval/parsingInterval");
-const {urlYudaev, channelYudaev, startWordYudaev, timeoutYudaev, saveVideoYudaev} = require("./channel/yudaevSchool");
+const triggerWordStart = require("./triggerWordStart/triggerWordStart");
+const channelYudaev = require("./channel/yudaevSchool");
 
 const token = process.env.TELEGRAM_TOKEN;
 
@@ -18,17 +16,11 @@ bot.on("message", async (msg) => {
     if (text === "/start") {
         await bot.sendMessage(chatId, "Hello")
     }
-    if (text === `${startWordYudaev}`) {
-        console.log(`${urlYudaev}: start of processing`);
-        parser(urlYudaev)
-            .then(arr => downloader(arr, urlYudaev, channelYudaev, saveVideoYudaev, sendToChannel))
-            .then(() => console.log(`${urlYudaev}: end of processing`))
-            .catch((e) => console.log({message: `${urlYudaev}: process error - ${e}`}));
+
+    if (text.includes(channelYudaev.startWord)) {
+        triggerWordStart(text, sendToChannel, channelYudaev)
     }
 })
-
-
-parsingInterval(urlYudaev, channelYudaev, saveVideoYudaev, sendToChannel, timeoutYudaev);
 
 
 async function sendToChannel(videoPath, channelId) {
@@ -41,4 +33,6 @@ async function sendToChannel(videoPath, channelId) {
         }
     }
 }
+
+
 

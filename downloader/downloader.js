@@ -3,8 +3,8 @@ const path = require("path");
 const { v4: uuidv4 } = require('uuid');
 const youtubedl = require("youtube-dl-exec");
 
-async function downloader(arr, url, channelId, save, sendFunction) {
-
+async function downloader(arr, url, channelId, save, sendFunction, offset) {
+   
     const channelName = url.split("/").at(-2);
     const dbPath = path.resolve(__dirname, "..", "db", `${channelName}.json`);
     const videosAll = (__dirname, "..", "videos");
@@ -24,9 +24,15 @@ async function downloader(arr, url, channelId, save, sendFunction) {
     }
    
     const processedLinks = JSON.parse(fs.readFileSync(dbPath, {encoding: "utf8"}));
+    if (offset > 0) {
+        processedLinks.splice(0, offset);
+    }
     
     let arrWithDeffence = [];
+
     arr.forEach(i => (!processedLinks.includes(i)) ? arrWithDeffence.push(i) : null);
+
+   
     while (arrWithDeffence.length) {
         const downloadLink = arrWithDeffence.pop();
         const nameVideo = uuidv4() + ".mp4";
@@ -37,7 +43,7 @@ async function downloader(arr, url, channelId, save, sendFunction) {
             console.log({message: `Error while downloading file: ${e}`});
         }
         
-        processedLinks.push(downloadLink);
+        processedLinks.unshift(downloadLink);
 
         await sendFunction(videoPath, channelId); 
         
