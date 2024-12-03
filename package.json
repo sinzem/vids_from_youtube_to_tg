@@ -3,17 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "nodemon index.js"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "config": "^3.3.12",
     "dotenv": "^16.4.5",
     "node-telegram-bot-api": "^0.66.0",
-    "nodemon": "^3.1.7",
     "puppeteer": "^22.15.0",
     "uuid": "^11.0.3",
     "youtube-dl-exec": "^3.0.10"
