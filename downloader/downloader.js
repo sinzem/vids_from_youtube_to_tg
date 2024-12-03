@@ -32,7 +32,6 @@ async function downloader(arr, url, channelId, save, sendFunction, offset) {
 
     arr.forEach(i => (!processedLinks.includes(i)) ? arrWithDeffence.push(i) : null);
 
-   
     while (arrWithDeffence.length) {
         const downloadLink = arrWithDeffence.pop();
         const nameVideo = uuidv4() + ".mp4";

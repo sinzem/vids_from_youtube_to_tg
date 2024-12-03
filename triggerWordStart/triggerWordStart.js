@@ -4,7 +4,7 @@ const downloader = require("../downloader/downloader");
 const parser = require("../parser/parser");
 const parsingInterval = require("../parsingInterval/parsingInterval");
 
-async function triggerWordStart(message, sendFunction, {url, channelId, startWord, timeout, saveVideo}) {
+async function triggerWordStart(message, sendFunction, {url, channelId, startWord, timeout, saveVideo, selector}) {
     let offset = 0;
     if (message.split(" ")[0] !== startWord) {
         return;
@@ -18,14 +18,13 @@ async function triggerWordStart(message, sendFunction, {url, channelId, startWor
         return;
     }
 
-    
     console.log(`${url}: start of processing`);
-    await parser(url, offset)
+    await parser(url, offset, selector)
         .then(arr => downloader(arr, url, channelId, saveVideo, sendFunction, offset))
         .then(() => console.log(`${url}: end of processing`))
         .catch((e) => console.log({message: `${url}: process error - ${e}`}));
 
-    parsingInterval(url, channelId, saveVideo, sendFunction, timeout, offset = 0);
+    parsingInterval(url, channelId, saveVideo, sendFunction, timeout, offset = 0, selector);
 }
 
 module.exports = triggerWordStart;
