@@ -4,6 +4,7 @@ const path = require("path");
 const TGBot = require("node-telegram-bot-api");
 const triggerWordStart = require("./triggerWordStart/triggerWordStart");
 const channelYudaev = require("./channel/yudaevSchool");
+const parsingInterval = require("./parsingInterval/parsingInterval");
 
 const token = process.env.TELEGRAM_TOKEN;
 
@@ -22,6 +23,7 @@ bot.on("message", async (msg) => {
     }
 })
 
+parsingInterval(channelYudaev, sendToChannel, offset = 0);
 
 async function sendToChannel(videoPath, channelId) {
     if (fs.existsSync(videoPath)) {
